@@ -3,6 +3,7 @@
 import { useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { useAuth } from '@/hooks/use-auth';
+import { api } from '@/lib/api';
 import Sidebar from '@/components/layout/sidebar';
 import Header from '@/components/layout/header';
 
@@ -13,8 +14,16 @@ export default function DashboardLayout({
 }) {
     const router = useRouter();
     const pathname = usePathname();
-    const isAuthenticated = useAuth((state) => state.isAuthenticated);
+    const { isAuthenticated, token } = useAuth();
 
+    // Restore token to API on mount
+    useEffect(() => {
+        if (token) {
+            api.setToken(token);
+        }
+    }, [token]);
+
+    // Check authentication
     useEffect(() => {
         if (!isAuthenticated) {
             router.push('/login');
