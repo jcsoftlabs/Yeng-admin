@@ -120,6 +120,48 @@ class ApiClient {
             body: JSON.stringify(data),
         });
     }
+
+    // Invoices
+    async getInvoices(filters?: { customerId?: string; status?: string; search?: string }) {
+        const params = new URLSearchParams();
+        if (filters?.customerId) params.append('customerId', filters.customerId);
+        if (filters?.status) params.append('status', filters.status);
+        if (filters?.search) params.append('search', filters.search);
+        const query = params.toString() ? `?${params.toString()}` : '';
+        return this.request(`/invoices${query}`);
+    }
+
+    async getInvoice(id: string) {
+        return this.request(`/invoices/${id}`);
+    }
+
+    async downloadInvoicePDF(id: string, invoiceNumber: string) {
+        const response = await fetch(`${API_URL}/invoices/${id}/pdf`, {
+            headers: {
+                'Authorization': `Bearer ${this.token}`,
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error('Erreur lors du téléchargement du PDF');
+        }
+
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `facture-${invoiceNumber}.pdf`;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+    }
+
+    async sendInvoiceEmail(id: string) {
+        return this.request(`/invoices/${id}/send-email`, {
+            method: 'POST',
+        });
+    }
 }
 
 export const api = new ApiClient();
