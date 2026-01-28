@@ -75,7 +75,7 @@ export default function ShipmentsPage() {
                                 value={search}
                                 onChange={(e) => setSearch(e.target.value)}
                                 onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
-                                placeholder="Numéro de tracking, nom du client..."
+                                placeholder="Numéro de tracking, code client (ex: 4582, PJean), nom..."
                                 className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-transparent"
                             />
                             <button
