@@ -93,7 +93,7 @@ export default function PaymentsPage() {
         }
 
         try {
-            await api.createPayment({
+            const payment = await api.createPayment({
                 parcelId: selectedParcel.id,
                 amount: parseFloat(formData.amount),
                 method: formData.method,
@@ -102,7 +102,20 @@ export default function PaymentsPage() {
                 notes: formData.notes,
             });
 
-            alert('Paiement enregistré avec succès!');
+            // Show receipt option for cash payments
+            if (formData.method === 'CASH') {
+                const printReceipt = confirm('Paiement enregistré avec succès!\n\nVoulez-vous imprimer le reçu thermique?');
+                if (printReceipt) {
+                    // Download and print receipt
+                    const link = document.createElement('a');
+                    link.href = `${api.baseURL}/payments/${payment.id}/receipt`;
+                    link.download = `receipt-${payment.id.substring(0, 8)}.pdf`;
+                    link.click();
+                }
+            } else {
+                alert('Paiement enregistré avec succès!');
+            }
+
             setFormData({ amount: '', method: 'CASH', reference: '', notes: '' });
             setSelectedParcel(null);
             setSearchTerm('');
