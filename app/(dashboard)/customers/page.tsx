@@ -42,10 +42,13 @@ export default function CustomersPage() {
                     <h1 className="text-3xl font-bold text-gray-900">Gestion des clients</h1>
                     <p className="text-gray-600 mt-1">Gérez vos clients</p>
                 </div>
-                <button className="inline-flex items-center space-x-2 bg-gradient-to-r from-violet-600 to-purple-600 text-white px-6 py-3 rounded-lg font-medium hover:from-violet-700 hover:to-purple-700 transition-all shadow-lg hover:shadow-xl">
+                <Link
+                    href="/customers/new"
+                    className="inline-flex items-center space-x-2 bg-gradient-to-r from-violet-600 to-purple-600 text-white px-6 py-3 rounded-lg font-medium hover:from-violet-700 hover:to-purple-700 transition-all shadow-lg hover:shadow-xl"
+                >
                     <Plus className="w-5 h-5" />
                     <span>Nouveau client</span>
-                </button>
+                </Link>
             </div>
 
             {/* Search */}
