@@ -78,14 +78,23 @@ export default function NewShipmentPage() {
     const handleSelectCustomer = (customer: Customer) => {
         setSelectedCustomer(customer);
         setSearchTerm(`${customer.customAddress} - ${customer.firstName} ${customer.lastName}`);
-        setFormData({ ...formData, customerId: customer.id });
+        setFormData({
+            ...formData,
+            customerId: customer.id,
+            // Auto-fill sender address with warehouse address
+            senderName: customer.customAddress,
+            senderAddress: '7829 NW 72nd Ave',
+            senderCity: 'Miami',
+            senderState: 'FL',
+            senderZipCode: '33166',
+        });
         setShowResults(false);
     };
 
     const calculateAutoPrice = () => {
         const weight = parseFloat(formData.weight) || 0;
         const declaredValue = parseFloat(formData.declaredValue) || 0;
-        const shippingFee = (weight * 5) + (declaredValue * 0.02);
+        const shippingFee = (weight * 3) + (declaredValue * 0.02);
         const taxAmount = shippingFee * 0.10;
         return { shippingFee, taxAmount, total: shippingFee + taxAmount };
     };
@@ -370,7 +379,7 @@ export default function NewShipmentPage() {
                     ) : (
                         <div className="p-4 bg-violet-50 rounded-lg border border-violet-200">
                             <p className="text-sm text-violet-800 mb-2">Calcul automatique basé sur:</p>
-                            <p className="text-sm text-violet-700">• Poids: {formData.weight || 0} lbs × $5 = ${((parseFloat(formData.weight) || 0) * 5).toFixed(2)}</p>
+                            <p className="text-sm text-violet-700">• Poids: {formData.weight || 0} lbs × $3 = ${((parseFloat(formData.weight) || 0) * 3).toFixed(2)}</p>
                             <p className="text-sm text-violet-700">• Valeur: ${formData.declaredValue || 0} × 2% = ${((parseFloat(formData.declaredValue) || 0) * 0.02).toFixed(2)}</p>
                         </div>
                     )}
