@@ -2,6 +2,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
 
 class ApiClient {
     private token: string | null = null;
+    public baseURL: string = API_URL;
 
     constructor() {
         if (typeof window !== 'undefined') {
