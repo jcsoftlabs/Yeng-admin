@@ -12,6 +12,10 @@ export default function ShipmentDetailPage() {
     const router = useRouter();
     const [parcel, setParcel] = useState<any>(null);
     const [loading, setLoading] = useState(true);
+    const [isEditingStatus, setIsEditingStatus] = useState(false);
+    const [newStatus, setNewStatus] = useState('');
+    const [newLocation, setNewLocation] = useState('');
+    const [updating, setUpdating] = useState(false);
 
     useEffect(() => {
         if (params.id) {
@@ -70,18 +74,96 @@ export default function ShipmentDetailPage() {
                 <div className="lg:col-span-2 space-y-6">
                     {/* Status */}
                     <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-                        <h3 className="text-lg font-semibold text-gray-900 mb-4">Statut</h3>
-                        <div className="flex items-center justify-between">
-                            <span className={`px-4 py-2 inline-flex text-sm font-semibold rounded-full ${getStatusColor(parcel.status)}`}>
-                                {parcel.status}
-                            </span>
-                            {parcel.currentLocation && (
-                                <div className="flex items-center space-x-2 text-gray-600">
-                                    <MapPin className="w-5 h-5" />
-                                    <span>{parcel.currentLocation}</span>
-                                </div>
+                        <div className="flex items-center justify-between mb-4">
+                            <h3 className="text-lg font-semibold text-gray-900">Statut</h3>
+                            {!isEditingStatus && (
+                                <button
+                                    onClick={() => {
+                                        setIsEditingStatus(true);
+                                        setNewStatus(parcel.status);
+                                        setNewLocation(parcel.currentLocation || '');
+                                    }}
+                                    className="px-4 py-2 text-sm font-medium text-violet-600 hover:bg-violet-50 rounded-lg transition-colors"
+                                >
+                                    Modifier
+                                </button>
                             )}
                         </div>
+
+                        {isEditingStatus ? (
+                            <div className="space-y-4">
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-2">Nouveau statut</label>
+                                    <select
+                                        value={newStatus}
+                                        onChange={(e) => setNewStatus(e.target.value)}
+                                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+                                    >
+                                        <option value="PENDING">PENDING</option>
+                                        <option value="IN_TRANSIT_USA">IN_TRANSIT_USA</option>
+                                        <option value="ARRIVED_MIAMI">ARRIVED_MIAMI</option>
+                                        <option value="IN_TRANSIT_HAITI">IN_TRANSIT_HAITI</option>
+                                        <option value="ARRIVED_HAITI">ARRIVED_HAITI</option>
+                                        <option value="READY_FOR_PICKUP">READY_FOR_PICKUP</option>
+                                        <option value="DELIVERED">DELIVERED</option>
+                                        <option value="CANCELLED">CANCELLED</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-2">Localisation actuelle</label>
+                                    <input
+                                        type="text"
+                                        value={newLocation}
+                                        onChange={(e) => setNewLocation(e.target.value)}
+                                        placeholder="Ex: Port-au-Prince, Haiti"
+                                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+                                    />
+                                </div>
+                                <div className="flex space-x-3">
+                                    <button
+                                        onClick={async () => {
+                                            setUpdating(true);
+                                            try {
+                                                await api.updateParcelStatus(parcel.id, {
+                                                    status: newStatus,
+                                                    location: newLocation,
+                                                    description: `Statut mis à jour: ${newStatus}`,
+                                                });
+                                                await loadParcel();
+                                                setIsEditingStatus(false);
+                                            } catch (error: any) {
+                                                alert(error.message || 'Erreur lors de la mise à jour');
+                                            } finally {
+                                                setUpdating(false);
+                                            }
+                                        }}
+                                        disabled={updating}
+                                        className="flex-1 px-4 py-2 bg-gradient-to-r from-violet-600 to-purple-600 text-white rounded-lg font-medium hover:from-violet-700 hover:to-purple-700 transition-all shadow-lg disabled:opacity-50"
+                                    >
+                                        {updating ? 'Enregistrement...' : 'Enregistrer'}
+                                    </button>
+                                    <button
+                                        onClick={() => setIsEditingStatus(false)}
+                                        disabled={updating}
+                                        className="px-4 py-2 border border-gray-300 rounded-lg font-medium text-gray-700 hover:bg-gray-50 transition-colors disabled:opacity-50"
+                                    >
+                                        Annuler
+                                    </button>
+                                </div>
+                            </div>
+                        ) : (
+                            <div className="flex items-center justify-between">
+                                <span className={`px-4 py-2 inline-flex text-sm font-semibold rounded-full ${getStatusColor(parcel.status)}`}>
+                                    {parcel.status}
+                                </span>
+                                {parcel.currentLocation && (
+                                    <div className="flex items-center space-x-2 text-gray-600">
+                                        <MapPin className="w-5 h-5" />
+                                        <span>{parcel.currentLocation}</span>
+                                    </div>
+                                )}
+                            </div>
+                        )}
                     </div>
 
                     {/* Package Details */}
