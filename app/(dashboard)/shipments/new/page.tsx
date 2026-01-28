@@ -96,7 +96,7 @@ export default function NewShipmentPage() {
         const declaredValue = parseFloat(formData.declaredValue) || 0;
         const shippingFee = (weight * 3) + (declaredValue * 0.02);
         const taxAmount = shippingFee * 0.10;
-        return { shippingFee, taxAmount, total: shippingFee + taxAmount };
+        return { shippingFee, discount: 0, taxAmount, total: shippingFee + taxAmount };
     };
 
     const calculateManualPrice = () => {
