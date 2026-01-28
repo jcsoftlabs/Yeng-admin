@@ -71,8 +71,8 @@ export default function ReportsPage() {
                                 key={tab.id}
                                 onClick={() => setActiveTab(tab.id)}
                                 className={`flex-1 flex items-center justify-center space-x-2 px-4 py-3 rounded-lg font-medium transition-all ${activeTab === tab.id
-                                        ? 'bg-gradient-to-r from-violet-600 to-purple-600 text-white shadow-lg'
-                                        : 'text-gray-600 hover:bg-gray-100'
+                                    ? 'bg-gradient-to-r from-violet-600 to-purple-600 text-white shadow-lg'
+                                    : 'text-gray-600 hover:bg-gray-100'
                                     }`}
                             >
                                 <Icon className="w-5 h-5" />
@@ -95,7 +95,7 @@ export default function ReportsPage() {
                                     cx="50%"
                                     cy="50%"
                                     labelLine={false}
-                                    label={(entry) => `${entry.status}: ${entry.count}`}
+                                    label={(entry: any) => `${entry.status}: ${entry.count}`}
                                     outerRadius={80}
                                     fill="#8884d8"
                                     dataKey="count"
