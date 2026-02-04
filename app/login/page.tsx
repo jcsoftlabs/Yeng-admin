@@ -100,7 +100,7 @@ export default function LoginPage() {
 
                 {/* Footer */}
                 <p className="text-center text-sm text-gray-500 mt-6">
-                    © 2026 Yeng Shipping. Tous droits réservés.
+                    © 2026 Yeng Shipping. Tous droits réservés. site web par Christopher JEROME
                 </p>
             </div>
         </div>
