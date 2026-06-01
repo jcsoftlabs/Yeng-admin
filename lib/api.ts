@@ -66,7 +66,7 @@ class ApiClient {
         return this.request(`/customers/${id}`);
     }
 
-    async createCustomer(data: any) {
+    async createCustomer(data: Record<string, unknown>) {
         return this.request('/customers', {
             method: 'POST',
             body: JSON.stringify(data),
@@ -95,7 +95,7 @@ class ApiClient {
         return this.request(`/parcels/tracking/${trackingNumber}`);
     }
 
-    async createParcel(data: any) {
+    async createParcel(data: Record<string, unknown>) {
         return this.request('/parcels', {
             method: 'POST',
             body: JSON.stringify(data),
@@ -115,7 +115,7 @@ class ApiClient {
         return this.request(`/payments${query}`);
     }
 
-    async createPayment(data: any) {
+    async createPayment(data: Record<string, unknown>) {
         return this.request('/payments', {
             method: 'POST',
             body: JSON.stringify(data),
@@ -162,6 +162,16 @@ class ApiClient {
         return this.request(`/invoices/${id}/send-email`, {
             method: 'POST',
         });
+    }
+
+    // Package forms
+    async getPackageForms(search?: string) {
+        const query = search ? `?search=${encodeURIComponent(search)}` : '';
+        return this.request(`/package-forms${query}`);
+    }
+
+    async getPackageForm(id: string) {
+        return this.request(`/package-forms/${id}`);
     }
 }
 

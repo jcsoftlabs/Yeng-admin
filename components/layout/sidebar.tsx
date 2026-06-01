@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import {
     LayoutDashboard,
@@ -9,7 +10,8 @@ import {
     CreditCard,
     BarChart3,
     ScanLine,
-    FileText
+    FileText,
+    ClipboardPenLine
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -19,6 +21,7 @@ const navigation = [
     { name: 'Clients', href: '/customers', icon: Users },
     { name: 'Paiements', href: '/payments', icon: CreditCard },
     { name: 'Factures', href: '/invoices', icon: FileText },
+    { name: 'Bons clients', href: '/package-forms', icon: ClipboardPenLine },
     { name: 'Scan', href: '/scan', icon: ScanLine },
     { name: 'Rapports', href: '/reports', icon: BarChart3 },
 ];
@@ -31,7 +34,7 @@ export default function Sidebar() {
             {/* Logo */}
             <div className="h-16 flex items-center px-6 border-b border-gray-200">
                 <div className="flex items-center space-x-3">
-                    <img src="/logo.png" alt="Yeng Shipping" className="w-10 h-10 object-contain" />
+                    <Image src="/logo.png" alt="Yeng Shipping" width={40} height={40} className="h-10 w-10 object-contain" />
                     <div>
                         <h1 className="text-lg font-bold text-gray-900">Yeng Shipping</h1>
                         <p className="text-xs text-gray-500">Admin</p>
